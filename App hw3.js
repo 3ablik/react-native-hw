@@ -9,6 +9,8 @@ import {
   ScrollView,
 
 } from "react-native";
+import CheckBox from 'react-native-checkbox';
+import { Button } from "react-native-web";
 
 export default function App() {
   const [todo, setTodo] = useState([
@@ -30,6 +32,22 @@ export default function App() {
   ]);
   const [name, setName] = useState("");
 
+  const handleCheckboxChange = (id) => {
+    const updatedTodo = todo.map(item =>
+      item.id !== id
+    );
+    console.log(updatedTodo);
+
+    setTodo(updatedTodo);
+  };
+
+  const handleDelete = () => {
+    const updatedTodo = todo.filter(item => {
+      item.id !== id
+    })
+    setTodo(updatedTodo)
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>To-do</Text>
@@ -50,7 +68,7 @@ export default function App() {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          setTodo([...todo, { name, check, id: todo.length.toString() }]);
+          setTodo([...todo, { name, check: false, id: todo.length.toString() }]);
         }}
       >
         <Text style={styles.buttonText}>Submit</Text>
@@ -58,10 +76,17 @@ export default function App() {
 
       <ScrollView style={styles.todoInfo}>
         {todo.map((todo) => (
-          <View key={todo.id}>
-              
+          <View style={styles.todo} key={todo.id}>
+            <CheckBox
+              disabled={false}
+              label=""
+              checked={todo.check}
+              onChange={() => handleCheckboxChange(todo.id)}
+            />
 
-              <Text style={styles.todoText}>{todo.name}</Text>
+            <Text style={styles.todoText}>{todo.name}</Text>
+
+            <Button onPress={() => handleDelete(todo.id)}>Del</Button>
           </View>
         ))}
       </ScrollView>
@@ -122,11 +147,13 @@ const styles = StyleSheet.create({
   todoText: {
     color: "white",
     fontSize: 16,
+    marginLeft: 10,
   },
-  image: {
-    width: 300,
-    height: 300,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-  },
+
+  todo: {
+    display: "flex",
+    flexDirection: "row",
+    width: 400,
+    backgroundColor: "rgb(60, 161, 255)"
+  }
 });
