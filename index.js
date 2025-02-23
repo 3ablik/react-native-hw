@@ -1,5 +1,5 @@
 import { registerRootComponent } from "expo";
 
-import App from "./App hw3";
+import App from "./homeworks/App hw3";
 
 registerRootComponent(App);

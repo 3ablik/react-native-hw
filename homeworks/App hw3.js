@@ -7,10 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-
+  Button,
 } from "react-native";
-import CheckBox from 'react-native-checkbox';
-import { Button } from "react-native-web";
+import CheckBox from "react-native-checkbox";
 
 export default function App() {
   const [todo, setTodo] = useState([
@@ -32,21 +31,20 @@ export default function App() {
   ]);
   const [name, setName] = useState("");
 
-  const handleCheckboxChange = (id) => {
-    const updatedTodo = todo.map(item =>
-      item.id !== id
-    );
+  const handleCheckboxChange = (check) => {
+    const updatedTodo = todo.map((item) => (item.check = !item.check));
     console.log(updatedTodo);
 
     setTodo(updatedTodo);
   };
 
-  const handleDelete = () => {
-    const updatedTodo = todo.filter(item => {
-      item.id !== id
-    })
-    setTodo(updatedTodo)
-  }
+  const handleDelete = (id) => {
+    const updatedTodo = todo.filter((item) => {
+      item.id !== id;
+      console.log(updatedTodo);
+    });
+    setTodo(updatedTodo);
+  };
 
   return (
     <View style={styles.container}>
@@ -62,13 +60,15 @@ export default function App() {
             value={name}
           />
         </View>
-
       </View>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          setTodo([...todo, { name, check: false, id: todo.length.toString() }]);
+          setTodo([
+            ...todo,
+            { name, check: false, id: todo.length.toString() },
+          ]);
         }}
       >
         <Text style={styles.buttonText}>Submit</Text>
@@ -78,15 +78,14 @@ export default function App() {
         {todo.map((todo) => (
           <View style={styles.todo} key={todo.id}>
             <CheckBox
-              disabled={false}
               label=""
               checked={todo.check}
-              onChange={() => handleCheckboxChange(todo.id)}
+              onChange={() => handleCheckboxChange(todo.check)}
             />
 
             <Text style={styles.todoText}>{todo.name}</Text>
 
-            <Button onPress={() => handleDelete(todo.id)}>Del</Button>
+            <Button onPress={() => handleDelete(todo.id)} title="Del"></Button>
           </View>
         ))}
       </ScrollView>
@@ -154,6 +153,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     width: 400,
-    backgroundColor: "rgb(60, 161, 255)"
-  }
+    backgroundColor: "rgb(60, 161, 255)",
+  },
 });
