@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
+  Image,
 } from "react-native";
-import CheckBox from "react-native-checkbox";
 
 export default function App() {
   const [todo, setTodo] = useState([
@@ -31,18 +31,26 @@ export default function App() {
   ]);
   const [name, setName] = useState("");
 
-  const handleCheckboxChange = (check) => {
-    const updatedTodo = todo.map((item) => (item.check = !item.check));
-    console.log(updatedTodo);
+  const handleCheckboxChange = (id, check) => {
+    const todoToChange = todo.find((item) => item.id === id);
+    todoToChange.check = !check;
+    const updatedTodo = todo.map((item) => {
+      if (item.id === id) {
+        return todoToChange;
+      }
+      return item;
+    });
 
     setTodo(updatedTodo);
   };
 
   const handleDelete = (id) => {
+    console.log(id, "id");
+
     const updatedTodo = todo.filter((item) => {
-      item.id !== id;
-      console.log(updatedTodo);
+      return item.id !== id;
     });
+    console.log(updatedTodo, "upd");
     setTodo(updatedTodo);
   };
 
@@ -77,11 +85,10 @@ export default function App() {
       <ScrollView style={styles.todoInfo}>
         {todo.map((todo) => (
           <View style={styles.todo} key={todo.id}>
-            <CheckBox
-              label=""
-              checked={todo.check}
-              onChange={() => handleCheckboxChange(todo.check)}
-            />
+            <Button
+              onPress={() => handleCheckboxChange(todo.id, todo.check)}
+              title={todo.check ? "☑️" : "🟦"}
+            ></Button>
 
             <Text style={styles.todoText}>{todo.name}</Text>
 
@@ -154,5 +161,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: 400,
     backgroundColor: "rgb(60, 161, 255)",
+    justifyContent: "space-between",
   },
 });
