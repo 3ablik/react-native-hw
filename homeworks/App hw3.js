@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
-  Image,
+  Animated,
 } from "react-native";
 
 export default function App() {
@@ -54,11 +54,26 @@ export default function App() {
     setTodo(updatedTodo);
   };
 
+  const rotateAnim = useRef(new Animated.Value(0)).current;
+
+  const rotate = () => {
+    Animated.timing(rotateAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const rotation = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>To-do</Text>
       <View style={styles.formContainer}>
-        <View>
+        <Animated.View style={{ transform: [{ rotate: rotation }] }}>
           <Text style={styles.label}>Name:</Text>
           <TextInput
             style={styles.input}
@@ -67,7 +82,7 @@ export default function App() {
             onChangeText={setName}
             value={name}
           />
-        </View>
+        </Animated.View>
       </View>
 
       <TouchableOpacity
@@ -77,6 +92,7 @@ export default function App() {
             ...todo,
             { name, check: false, id: todo.length.toString() },
           ]);
+          rotate();
         }}
       >
         <Text style={styles.buttonText}>Submit</Text>
@@ -84,9 +100,14 @@ export default function App() {
 
       <ScrollView style={styles.todoInfo}>
         {todo.map((todo) => (
-          <View style={styles.todo} key={todo.id}>
+          <View
+            style={styles.todo} // Я попытался сделать анимацию тут. Не вышло. Поэтому крутить будем инпут
+            key={todo.id}
+          >
             <Button
-              onPress={() => handleCheckboxChange(todo.id, todo.check)}
+              onPress={() => {
+                handleCheckboxChange(todo.id, todo.check);
+              }}
               title={todo.check ? "☑️" : "🟦"}
             ></Button>
 
