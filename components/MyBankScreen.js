@@ -7,7 +7,7 @@ export default function HomeScreen() {
   const [inputGet, setInputGet] = useState(0);
 
   const addTo = () => {
-    if (isNaN(inputAdd) || inputGet <= 0) {
+    if (isNaN(inputAdd) || inputAdd <= 0) {
       Alert.alert("Input right number!");
     } else {
       setBalance(balance + Number(inputAdd));
@@ -25,10 +25,6 @@ export default function HomeScreen() {
       }
     }
   };
-
-  useEffect(() => {
-    console.log(balance);
-  });
 
   return (
     <View style={styles.container}>
