@@ -8,6 +8,9 @@ import ProfileScreen from "./components/ProfileScreen";
 import ContactScreen from "./components/ContactScreen";
 import MyBankScreen from "./components/MyBankScreen";
 
+import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -15,15 +18,34 @@ export default function App() {
 
   return (
     <NavigationContainer style={styles.container}>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarShowLabel: false,
-          toBarLabelPosition: "beside-icon",
-        }}
-      >
-        <Tab.Screen name="My Bank" component={MyBankScreen} />
-        <Tab.Screen name="Contact Us" component={ContactScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Navigator>
+        <Tab.Screen
+          name="My Bank"
+          options={{
+            tabBarIcon: () => (
+              <MaterialCommunityIcons name="bank" size={24} color="black" />
+            ),
+          }}
+          component={MyBankScreen}
+        />
+        <Tab.Screen
+          name="Contact Us"
+          options={{
+            tabBarIcon: () => (
+              <AntDesign name="questioncircleo" size={24} color="black" />
+            ),
+          }}
+          component={ContactScreen}
+        />
+        <Tab.Screen
+          name="Profile"
+          options={{
+            tabBarIcon: () => (
+              <MaterialCommunityIcons name="account" size={24} color="black" />
+            ),
+          }}
+          component={ProfileScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
